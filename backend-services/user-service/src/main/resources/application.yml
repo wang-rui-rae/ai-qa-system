@@ -2,14 +2,22 @@ server:
   port: 8081
 spring:
   application:
-    name: user-service
+    name: user-service-rae
   cloud:
     nacos:
-      server-addr: 54.219.180.170:8848
+      server-addr: 3.84.225.222:8848
+      # --rae's recording--
+      # 访问url : http://54.219.180.170:8080/
+      # user : nacos
+      # password : nacos
+
   datasource:
-    url: jdbc:mysql://54.219.180.170:3306/ai_qa_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+#    url: jdbc:mysql://54.219.180.170:3306/ai_qa_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+#    username: root
+#    password: ai_qa_system
+    url: jdbc:mysql://localhost:3306/ai_qa_system
     username: root
-    password: ai_qa_system
+    password: root
   jpa:
     hibernate:
       ddl-auto: update

@@ -1,14 +1,12 @@
 package com.ai.qa.user.api.controller;
 
-import com.ai.qa.user.api.dto.ApiResponse;
-import com.ai.qa.user.api.dto.AuthRequest;
-import com.ai.qa.user.api.dto.AuthResponse;
-import com.ai.qa.user.application.dto.UpdateNicknameRequest;
+import com.ai.qa.user.api.dto.*;
+import com.ai.qa.user.application.dto.GetUserInfoResponseDto;
+import com.ai.qa.user.application.dto.UpdateNicknameRequestDto;
+import com.ai.qa.user.application.dto.UpdateNicknameResponseDto;
 import com.ai.qa.user.application.service.UserApplicationService;
-import com.ai.qa.user.domain.model.User;
-import lombok.RequiredArgsConstructor;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /***
@@ -39,31 +37,49 @@ public class UserController {
      * @return 返回更新后的用户信息和HTTP状态码200 (OK)
      */
     @PostMapping("/{userId}/nickname")
-    public ApiResponse<User> updateNickname(
+    public ApiResponse<UpdateNicknameResponseDto> updateNickname(
             @PathVariable Long userId,
-            @RequestBody UpdateNicknameRequest request) {
-        //校验。。。
+            @RequestBody UpdateNicknameRequestDto request) {
 
         // 控制器只负责调用应用层，不处理业务逻辑
-        User updatedUser = userApplicationService.updateNickname(userId, request.getNickname());
-        // 为了安全，最佳实践是返回一个DTO而不是直接返回领域实体，这里为了简化直接返回
-        return ApiResponse.success(updatedUser);
+        UpdateNicknameResponseDto updateNicknameResponseDto = userApplicationService.updateNickname(userId, request.getNickname());
+        return ApiResponse.success(updateNicknameResponseDto);
     }
+
+    // TODO jwt
+    /**
+     * 根据username和password获取user信息的API端点
+     *
+     * @param request 包含用户信息的请求体
+     * @return 返回resultCode(00)和HTTP状态码200 (OK)
+     */
     @PostMapping("/login")
-    public AuthResponse login(@RequestBody AuthRequest request) {
-        System.out.println("测试login");
-        return new AuthResponse("token");
+    public UserLoginResponseDto login(@RequestBody UserLoginRequestDto request) {
+        UserLoginResponseDto userLoginResponseDto = userApplicationService.login(request);
+        return new UserLoginResponseDto("00");
     }
 
+    /**
+     * 注册用户信息的API端点
+     *
+     * @param request 包含用户信息的请求体
+     * @return 返回resultCode(00)和HTTP状态码200 (OK)
+     */
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody AuthRequest request) {
-        System.out.println("测试register");
-        return new AuthResponse("register");
+    public ApiResponse<UserRegisterResponseDto> register(@Valid @RequestBody UserRegisterRequestDto request) {
+        UserRegisterResponseDto userRegisterResponseDto = userApplicationService.register(request);
+        return ApiResponse.success(userRegisterResponseDto);
     }
 
+    /**
+     * 根据id获取user信息的API端点
+     *
+     * @param userId 从URL路径中获取的用户ID
+     * @return 返回用户信息和HTTP状态码200 (OK)
+     */
     @GetMapping("/{userId}")
-    public String getUserById(@PathVariable("userId") Long userId) {
-        System.out.println("测试userid");
-        return "userid:"+userId;
+    public ApiResponse<GetUserInfoResponseDto> getUserById(@PathVariable("userId") Long userId) {
+        GetUserInfoResponseDto getUserInfoResponseDto = userApplicationService.getUserById(userId);
+        return ApiResponse.success(getUserInfoResponseDto);
     }
 }

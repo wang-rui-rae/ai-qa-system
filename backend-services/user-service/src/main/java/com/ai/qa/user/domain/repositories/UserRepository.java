@@ -19,4 +19,17 @@ public interface UserRepository {
      * @return 已保存的用户聚合
      */
     User save(User user);
+
+    /**
+     * 根据username查找用户聚合
+     * @param id 用户ID
+     * @return 一个包含用户（如果找到）的Optional
+     */
+
+    /**
+     * 根据username查找用户聚合
+     * @param username 用户名
+     * @return 一个包含用户（如果找到）的Optional
+     */
+    Optional<User> findByUsername(String username);
 }

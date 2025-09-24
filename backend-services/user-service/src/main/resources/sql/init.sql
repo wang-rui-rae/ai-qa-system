@@ -7,11 +7,12 @@ USE `ai_qa_system`;
 -- ----------------------------
 -- 用户表 (user)
 -- ----------------------------
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
+DROP TABLE IF EXISTS `users_rae`;
+CREATE TABLE `users_rae` (
   `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键ID',
   `username` VARCHAR(255) NOT NULL COMMENT '用户名',
   `password` VARCHAR(255) NOT NULL COMMENT '加密后的密码',
+  `nickname` VARCHAR(255) NOT NULL COMMENT '昵称',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `update_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`id`),

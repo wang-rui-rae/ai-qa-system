@@ -5,6 +5,7 @@ import com.ai.qa.user.api.dto.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -45,5 +46,16 @@ public class GlobalExceptionHandler {
         log.error("发生未知异常", ex);
         ErrorCode errorCode = ErrorCode.INTERNAL_SERVER_ERROR;
         return new ResponseEntity<>(ApiResponse.failure(errorCode), errorCode.getHttpStatus());
+    }
+
+    /**
+     * 处理自定义的业务异常
+     * 针对request数据进行参数校验
+     */
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Object>> handleBusinessException(MethodArgumentNotValidException ex) {
+        log.warn("request数据参数校验异常: {}", ex.getMessage());
+        ErrorCode errorCode = ErrorCode.BAD_REQUEST;
+        return new ResponseEntity<>(ApiResponse.failure(errorCode, ex.getMessage()), errorCode.getHttpStatus());
     }
 }

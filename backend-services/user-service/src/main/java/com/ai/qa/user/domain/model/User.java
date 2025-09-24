@@ -1,27 +1,38 @@
 package com.ai.qa.user.domain.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDateTime;
+
+@Data
 @Entity
-@Table(name = "users")
+@Table(name = "users_rae")
+@AllArgsConstructor
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "username", nullable = false)
     private String username;
 
+    @Column(name = "password", nullable = false)
     private String password;
 
+    @Column(name = "nickname", nullable = false)
     private String nickname;
 
+    @Column(name = "create_time", nullable = false)
+    private LocalDateTime createTime;
+
+    @Column(name = "update_time", nullable = false)
+    private LocalDateTime updateTime;
+
     // JPA需要一个无参构造函数
-    protected User() {}
+    public User() {}
 
     public User(String username, String password) {
         this.username = username;
@@ -52,20 +63,4 @@ public class User {
         this.nickname = newNickname;
     }
 
-    // --- Getters ---
-    public Long getId() {
-        return id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
 }

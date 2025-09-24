@@ -14,6 +14,8 @@ public enum ErrorCode {
     NICKNAME_IS_EMPTY(HttpStatus.BAD_REQUEST, 1001, "昵称不能为空"),
     NICKNAME_TOO_LONG(HttpStatus.BAD_REQUEST, 1002, "昵称长度不能超过50个字符"),
     NICKNAME_UNCHANGED(HttpStatus.BAD_REQUEST, 1003, "新昵称不能与旧昵称相同"),
+    USER_ALREADY_EXISTED(HttpStatus.BAD_REQUEST, 1004, "用户已经存在"),
+    PASSWORD_WRONG(HttpStatus.BAD_REQUEST, 1005, "密码错误"),
 
     // --- 服务器错误 (5xx) ---
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, 500, "服务器内部错误");

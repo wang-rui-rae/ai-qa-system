@@ -21,6 +21,7 @@
         <module>api-gateway</module>
     </modules>
 
+
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -28,6 +29,7 @@
         <spring-cloud.version>2022.0.5</spring-cloud.version>
         <spring-boot.version>3.1.11</spring-boot.version>
         <spring-cloud-alibaba.version>2022.0.0.0</spring-cloud-alibaba.version>
+        <spring-framework.version>6.0.19</spring-framework.version>
     </properties>
 
     <!-- 统一管理所有子模块的依赖版本 -->
@@ -54,6 +56,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- user-service的启动类报错：【Cannot access org.springframework.context.ConfigurableApplicationContext】 -->
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-context</artifactId>
+                <version>${spring-framework.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>
