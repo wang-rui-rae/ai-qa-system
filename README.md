@@ -74,3 +74,9 @@ public class UserServiceApplication {
           * allowPublicKeyRetrieval 的作用是允许客户端从服务器获取公钥，从而使用新的安全认证方式。
           * 保存并重新测试连接。
 
+* 问题2：
+*  项目启动的时候出现：
+*     Caused by: java.sql.SQLException: No database selected
+*  解决：
+*     建sechma：CREATE DATABASE 【ai_qa_system】;
+
