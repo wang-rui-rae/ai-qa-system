@@ -3,6 +3,10 @@ server:
 spring:
   application:
     name: user-service-rae
+  config:
+    import:
+      # 引入共享配置
+      - "optional:nacos:shared-config-rae.yml"
   cloud:
     nacos:
       server-addr: 3.84.225.222:8848
@@ -10,6 +14,7 @@ spring:
       # 访问url : http://54.219.180.170:8080/
       # user : nacos
       # password : nacos
+
 
   datasource:
 #    url: jdbc:mysql://54.219.180.170:3306/ai_qa_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai

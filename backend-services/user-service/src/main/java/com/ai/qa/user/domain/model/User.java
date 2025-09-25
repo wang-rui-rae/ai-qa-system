@@ -1,6 +1,7 @@
 package com.ai.qa.user.domain.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users_rae")
 @AllArgsConstructor
+@Builder
 public class User {
 
     @Id
