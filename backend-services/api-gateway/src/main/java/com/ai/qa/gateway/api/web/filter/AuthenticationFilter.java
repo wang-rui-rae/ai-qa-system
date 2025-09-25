@@ -1,5 +1,6 @@
 package com.ai.qa.gateway.api.web.filter;
 
+import com.ai.qa.gateway.application.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,31 +27,36 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        // 定义白名单路径，这些路径不需要JWT验证
+        // 1. 定义白名单路径，这些路径不需要JWT验证
         List<String> whiteList = List.of("/api/user/register", "/api/user/login");
         if (whiteList.contains(request.getURI().getPath())) {
             return chain.filter(exchange); // 放行
         }
 
+        // 2. Token 缺失或格式错误，返回 401
         String authHeader = request.getHeaders().getFirst("Authorization");
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             return exchange.getResponse().setComplete();
         }
 
+        // 3. Token 验证（签名和过期时间）
         String token = authHeader.substring(7);
         try {
-            Claims claims = Jwts.parserBuilder()
+            Claims claims = Jwts.parser()
                     .setSigningKey(jwtSecret.getBytes())
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
 
+            // 4. 解析用户信息并注入请求头 (身份传递的最佳实践)
             // 验证通过，可以将用户信息放入请求头，传递给下游服务
+            // ️ 实际项目中，应解析出 Roles/Scopes，并注入 X-User-Roles 等头部
             ServerHttpRequest mutatedRequest = request.mutate()
                     .header("X-User-Id", claims.getSubject())
                     .header("X-User-Name", claims.get("username", String.class))
                     .build();
+            // 5. 验证成功，继续转发请求
             return chain.filter(exchange.mutate().request(mutatedRequest).build());
         } catch (Exception e) {
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
