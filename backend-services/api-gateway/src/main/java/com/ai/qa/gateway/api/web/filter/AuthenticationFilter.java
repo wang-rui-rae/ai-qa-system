@@ -1,10 +1,10 @@
 package com.ai.qa.gateway.api.web.filter;
 
-import com.ai.qa.gateway.application.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.io.Decoders;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
@@ -13,10 +13,10 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
 import java.util.List;
 
-//@Component
+@Slf4j
+@Component
 //@RefreshScope // 为了动态刷新JWT密钥
 public class AuthenticationFilter implements GlobalFilter, Ordered {
 
@@ -28,7 +28,7 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
 
         // 1. 定义白名单路径，这些路径不需要JWT验证
-        List<String> whiteList = List.of("/api/user/register", "/api/user/login");
+        List<String> whiteList = List.of("/api/auth/register", "/api/auth/login");
         if (whiteList.contains(request.getURI().getPath())) {
             return chain.filter(exchange); // 放行
         }
@@ -42,9 +42,11 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
 
         // 3. Token 验证（签名和过期时间）
         String token = authHeader.substring(7);
+
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(jwtSecret.getBytes())
+//                    .setSigningKey(jwtSecret.getBytes())
+                    .setSigningKey(Decoders.BASE64.decode(jwtSecret))
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
