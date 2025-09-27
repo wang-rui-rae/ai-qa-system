@@ -5,6 +5,8 @@ import com.ai.qa.user.application.dto.GetUserInfoResponseDto;
 import com.ai.qa.user.application.dto.UpdateNicknameRequestDto;
 import com.ai.qa.user.application.dto.UpdateNicknameResponseDto;
 import com.ai.qa.user.application.service.UserApplicationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/api/user")
+@Tag(name="用户管理",description = "提供用户相关接口")
 public class UserController {
 
     private final UserApplicationService userApplicationService;
@@ -37,6 +40,7 @@ public class UserController {
      * @return 返回更新后的用户信息和HTTP状态码200 (OK)
      */
     @PostMapping("/{userId}/nickname")
+    @Operation(summary = "=用户昵称更新", description = "该接口用于更新用户昵称")
     public ApiResponse<UpdateNicknameResponseDto> updateNickname(
             @PathVariable Long userId,
             @RequestBody UpdateNicknameRequestDto request) {
@@ -45,6 +49,21 @@ public class UserController {
         UpdateNicknameResponseDto updateNicknameResponseDto = userApplicationService.updateNickname(userId, request.getNickname());
         return ApiResponse.success(updateNicknameResponseDto);
     }
+
+    /**
+     * 根据id获取user信息的API端点
+     *
+     * @param userId 从URL路径中获取的用户ID
+     * @return 返回用户信息和HTTP状态码200 (OK)
+     */
+    @Operation(summary = "=获取用户ID", description = "该接口用于获取用户ID")
+    @GetMapping("/{userId}")
+    public ApiResponse<GetUserInfoResponseDto> getUserById(@PathVariable("userId") Long userId) {
+        GetUserInfoResponseDto getUserInfoResponseDto = userApplicationService.getUserById(userId);
+        return ApiResponse.success(getUserInfoResponseDto);
+    }
+
+
 
     // TODO jwt
     /**
@@ -71,15 +90,4 @@ public class UserController {
         return ApiResponse.success(userRegisterResponseDto);
     }
 
-    /**
-     * 根据id获取user信息的API端点
-     *
-     * @param userId 从URL路径中获取的用户ID
-     * @return 返回用户信息和HTTP状态码200 (OK)
-     */
-    @GetMapping("/{userId}")
-    public ApiResponse<GetUserInfoResponseDto> getUserById(@PathVariable("userId") Long userId) {
-        GetUserInfoResponseDto getUserInfoResponseDto = userApplicationService.getUserById(userId);
-        return ApiResponse.success(getUserInfoResponseDto);
-    }
 }

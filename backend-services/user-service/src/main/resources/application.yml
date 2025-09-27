@@ -10,8 +10,9 @@ spring:
   cloud:
     nacos:
       server-addr: 3.84.225.222:8848
+      # http://3.84.225.222:8848/nacos
       # --rae's recording--
-      # 访问url : http://54.219.180.170:8080/
+      # 访问url : http://54.219.180.170:8080/nacos/
       # user : nacos
       # password : nacos
 

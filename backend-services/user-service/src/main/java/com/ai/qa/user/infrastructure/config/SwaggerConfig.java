@@ -30,17 +30,19 @@ public class SwaggerConfig {
         return new OpenAPI()
                 // Info对象: 包含 API 文档的基本信息，如标题、版本、描述和许可证
                 .info(new Info()
-                        .title("航空公司订单管理系统")
-                        .description("航空公司订单管理系统的RESTful")
+                        .title("AI智能问答系统-User服务")
+                        .description("AI智能问答系统-User服务的RESTful")
                         .version("1.0.0")
                         .contact(new Contact()
-                                .name("Postion")
-                                .email("support@postion.app")
+//                                .name("Postion")
+//                                .email("support@postion.app")
                                 .url("https://github.com/wang-rui-rae"))
                        )
                 .servers(java.util.Arrays.asList(
-                        new Server().url("http://52.53.199.13:8080").description("开发环境"),
-                        new Server().url("https://api.airline.com").description("生产环境")
+                        new Server().url("http://loaclhost:8081").description("开发环境")
+                        // TODO
+                        // 这个位置待修改
+//                        new Server().url("https://api.airline.com").description("生产环境")
                 ))
 
                 //安全配置
