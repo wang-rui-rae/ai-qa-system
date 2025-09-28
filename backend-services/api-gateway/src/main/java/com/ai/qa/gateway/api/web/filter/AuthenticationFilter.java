@@ -51,12 +51,17 @@ public class AuthenticationFilter implements GlobalFilter, Ordered {
                     .parseClaimsJws(token)
                     .getBody();
 
+            log.info("JWT 解析成功: Subject (X-User-Id) = {}", claims.getSubject());
+            log.info("JWT 解析成功: Username (X-User-Name) = {}", claims.get("username", String.class));
+
             // 4. 解析用户信息并注入请求头 (身份传递的最佳实践)
             // 验证通过，可以将用户信息放入请求头，传递给下游服务
             // ️ 实际项目中，应解析出 Roles/Scopes，并注入 X-User-Roles 等头部
             ServerHttpRequest mutatedRequest = request.mutate()
                     .header("X-User-Id", claims.getSubject())
                     .header("X-User-Name", claims.get("username", String.class))
+                    // 💡 关键修改：在转发给下游服务之前，移除原始的 Authorization 头部
+                    .headers(headers -> headers.remove("Authorization"))
                     .build();
             // 5. 验证成功，继续转发请求
             return chain.filter(exchange.mutate().request(mutatedRequest).build());
