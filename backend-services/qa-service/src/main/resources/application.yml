@@ -1,13 +1,84 @@
 server:
   port: 8082
+
 spring:
+  config:
+    import: "optional:file:.env[.properties]" # 改为可选，当前目录
   application:
-    name: qa-service
+    name: qa-service-rae
   cloud:
     nacos:
-      server-addr: 54.219.180.170:8848
+      server-addr: 3.84.225.222:8848
+
+  datasource:
+    # url: jdbc:mysql://9.78.190.130:3306/ai_qa_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    # username: remote_user_group2
+    # password: Group2Password123!
+    url: jdbc:mysql://localhost:3306/ai_qa_system?useUnicode=true&characterEncoding=utf-8&serverTimezone=UTC
+    username: root
+    password: root
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 2
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+        format_sql: true
+    show-sql: true
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.actuate.autoconfigure.metrics.MetricsAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.metrics.export.simple.SimpleMetricsExportAutoConfiguration
+      - org.springframework.boot.actuate.autoconfigure.metrics.SystemMetricsAutoConfiguration
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# https://platform.deepseek.com/api_keys
+# key: sk-c2496a8c28fa4765a3055617e98ed59d
+
+deepseek:
+  api:
+    base-url: https://api.deepseek.com/v1
+#    key: ${DEEPSEEK_API_KEY:YOUR_DEEPSEEK_API_KEY_HERE} # YOUR_DEEPSEEK_API_KEY_HERE 替换为实际的API Key
+    key: ${DEEPSEEK_API_KEY:YOUR_DEEPSEEK_API_KEY_HERE} # YOUR_DEEPSEEK_API_KEY_HERE 替换为实际的API Key
+    model: deepseek-chat
+
 logging:
+  file:
+    name: application.log
+    path: logs
   level:
-    # 将你的FeignClient接口所在的包路径设置为DEBUG
-    # 假设 UserClient 在 com.ai.qa.qaservice.feign 包下
-    com.ai.qa.qaservice.feign: DEBUG
+    com.ai.qa.service: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  charset:
+    console: UTF-8
+    file: UTF-8
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+      base-path: /actuator
+  endpoint:
+    health:
+      enabled: true
+      show-details: when_authorized
+    info:
+      enabled: true
+    metrics:
+      enabled: false
+  metrics:
+    enable:
+      process: false
+      system: false
