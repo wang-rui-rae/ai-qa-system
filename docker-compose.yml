@@ -1,7 +1,7 @@
 services:
 
   postgres:
-    image: postgres:14-alpine
+    image: postgres:13-alpine
     # --- 添加下面的 environment 部分 ---
     environment:
       POSTGRES_USER: postgres      # 使用您 application.yml 中的用户名
