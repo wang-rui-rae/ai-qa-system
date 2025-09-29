@@ -11,7 +11,9 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - ai-network
     restart: always # 建议添加，确保容器失败后能自动重启
   
   api-gateway:
