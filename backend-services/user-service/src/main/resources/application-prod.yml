@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    nacos:
+      discovery:
+        # server-addr: 54.183.199.195:8848
+        group: DEFAULT_GROUP
+        # ip: 54.183.199.195
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        ip: ${SPRING_CLOUD_NACOS_DISCOVERY_IP}
