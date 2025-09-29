@@ -1,6 +1,6 @@
 services:
 
-  postgre-db:
+  postgres:
     image: postgres:14-alpine
     # --- 添加下面的 environment 部分 ---
     environment:
