@@ -11,7 +11,7 @@ spring:
         server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
         ip: ${SPRING_CLOUD_NACOS_DISCOVERY_IP}
   datasource:
-    url: jdbc:postgresql://54.183.199.195:5432/ai_qa_system?useUnicode=true&characterEncoding=utf8
+    url: jdbc:postgresql://postgre-db:5432/ai_qa_system?useUnicode=true&characterEncoding=utf8
     username: postgres
     password: root
     driver-class-name: org.postgresql.Driver

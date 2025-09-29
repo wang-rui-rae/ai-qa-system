@@ -1,4 +1,19 @@
 services:
+
+  postgres:
+    image: postgres:14-alpine
+    # --- 添加下面的 environment 部分 ---
+    environment:
+      POSTGRES_USER: postgres      # 使用您 application.yml 中的用户名
+      POSTGRES_PASSWORD: root          # 使用您 application.yml 中的密码
+      POSTGRES_DB: postgresql  # 创建您 application.yml 中指定的数据库
+    # ------------------------------------
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: always # 建议添加，确保容器失败后能自动重启
+  
   api-gateway:
     build:
       context: ./backend-services
